@@ -76,3 +76,10 @@ transflow/
 ├── docker-compose.yml
 ├── Dockerfile
 └── requirements.txt
+
+## Imagens
+
+- [Swagger](https://drive.google.com/file/d/17tMxraGl6miHd-3Hc1Sry8l9QvkrwflH/view?usp=sharing)
+- [GET /corridas](https://drive.google.com/file/d/1wXZFXEjGut9zY1XppFmtOOfMIQPUYzxl/view?usp=sharing)
+- [GET /Saldo](https://drive.google.com/file/d/1IBhtUlNZfLkuVbhT5y1VHI1Ai8Ba32vY/view?usp=sharing)
+- [Post /Corridas](https://drive.google.com/file/d/1nN_40X4wT26OovRsqs_ewD4T4LoSX8WG/view?usp=sharing)
