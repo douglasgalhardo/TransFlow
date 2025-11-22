@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+pydantic
+motor
+redis
+faststream[rabbit]
+aio_pika
+python-dotenv

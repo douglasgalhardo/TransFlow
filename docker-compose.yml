@@ -1,0 +1,76 @@
+version: "3.9"
+
+services:
+  # API Principal (FastAPI)
+  app:
+    build: .
+    container_name: transflow_app
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - REDIS_HOST=redis
+      - MONGO_HOST=mongo
+    depends_on:
+      - mongo
+      - redis
+      - rabbitmq
+
+  # Worker Assíncrono (Consumidor FastStream)
+  worker:
+    build: .
+    container_name: transflow_worker
+    # Executa o consumidor que houve a fila e atualiza os bancos
+    command: python -m src.consumer
+    volumes:
+      - .:/app
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - REDIS_HOST=redis
+      - MONGO_HOST=mongo
+    depends_on:
+      - mongo
+      - redis
+      - rabbitmq
+
+  # Banco de Dados: MongoDB
+  mongo:
+    image: mongo:6.0
+    container_name: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  # Cache/Saldos: Redis
+  redis:
+    image: redis:7.0
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  # Mensageria: RabbitMQ
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672" # Porta padrão AMQP
+      - "15672:15672" # Interface de Gerenciamento
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+volumes:
+  mongo_data:
+  redis_data:
